@@ -1,0 +1,243 @@
+{% extends 'index.html' %}
+
+{% block aside %}
+{% if user.user_type == '4' %}
+    <aside>
+        <div class="top">
+            <div class="logo">
+                {% load static %}
+                <img src="{% static './image/logo.png'%}">
+                <h2>BAH<span class="danger">AR</span></h2>
+            </div>
+            <div class="close" id="close-btn">
+                <span class="material-icons-sharp">&#9776;</span>
+            </div>
+        </div>
+        <div class="sidebar">
+            <a href="{% url 'teacher-system'%}" class="icon-a">
+                <span class="fa fa-home spancons"></span>
+                <h3>Home</h3>
+            </a>
+            <a href="{% url 'my-profile'%}" class="icon-a active">
+                <span class="fa fa-users icons"></span>
+                <h3>My Class</h3>
+            </a>
+            <a href="{% url 'logout' %}" class="icon-a">
+                <span class="fa fa-sign-out-alt icons"></span>
+                <h3>Logout</h3>
+            </a>
+        </div>
+    </aside>
+    {% else %}
+    <aside>
+        <div class="top">
+            <div class="logo">
+                {% load static %}
+                <img src="{% static './image/logo.png'%}">
+                <h2>BAH<span class="danger">AR</span></h2>
+            </div>
+            <div class="close" id="close-btn">
+                <span class="material-icons-sharp">&#9776;</span>
+            </div>
+        </div>
+        <div class="sidebar">
+            <a href="{% url 'home'%}" class="icon-a">
+                <span class="fa fa-home spancons"></span>
+                <h3>Home</h3>
+            </a>
+            <a href="{% url 'class-add'%}" class="icon-a active">
+                <span class="fa fa-book-open  icons"></span>
+                <h3>Add Class</h3>
+            </a>
+            <a href="{% url 'qars'%}" class="icon-a">
+                <span class="fa fa-money-bill-alt icons"></span>
+                <h3>Remainder</h3>
+            </a>
+            <a href="{% url 'exam' %}" class="icon-a">
+                <span class="fa fa-book-reader icons"></span>
+                <h3>Exam</h3>
+            </a>
+            <a href="{% url 'all-student'%}" class="icon-a">
+                <span class="fa fa-users icons"></span>
+                <h3>All Students</h3>
+            </a>
+            <a href="{% url 'teacher-all'%}" class="icon-a">
+                <span class="fa fa-chalkboard-teacher icons"></span>
+                <h3>View Teacher</h3>
+            </a>
+            <a href="{% url 'acounting'%}" class="icon-a">
+                <span class="fa fa-coins icons"></span>
+                <h3>Acounting</h3>
+            </a>
+            <a href="{% url 'logout' %}" class="icon-a">
+                <span class="fa fa-sign-out-alt icons"></span>
+                <h3>Logout</h3>
+            </a>
+        </div>
+    </aside>
+{% endif %}
+{% endblock aside %}
+
+{% block main %}
+<main>
+    {% include 'logo.html' %}
+    <!---------- END OF insights ---------->
+    <div class="recent-order">
+        <div class="payment">
+            <h2>Score Records</h2>
+            {% if group.subject == 'Starter' or group.subject == 'Prep 1' or group.subject == 'Prep 2' or group.subject == 'Prep 3' %}
+            <table>
+                <thead>
+                    <tbody>
+                        <rt>
+                            <th>Full Name</th>
+                            <th>Middle</th>
+                            <th>Final</th>
+                            <th>Class Activity</th>
+                            <th>Homework</th>
+                            <th>Total</th>
+                            <th>Result</th>
+                        </rt>
+                        {% for i in students %}
+                        <tr>
+                            <td class="primary">{{i.id_student.first_name}} {{i.id_student.last_name}}</td>
+                            <td class="primary">{{i.score.score}}</td>
+                            <td class="primary"><span class="value_fr">{{i.score.final_score}}</span></td>
+                            <td class="primary">{{i.score.activate}}</td>
+                            <td class="primary">{{i.score.home_work}}</td>
+                            <td class="primary"><script>
+                                try{
+                                    document.write({{i.score.score}}+{{i.score.final_score}}+{{i.score.activate}}+
+                                    {{i.score.home_work}})
+                                }
+                                catch(SyntaxError) {
+                                    document.write(SyntaxError.message)
+                                  }
+                                </script> / 100</td>
+                            <td class="primary">
+                                <script>
+                                    try{
+                                        if({{i.score.score}}+{{i.score.final_score}}+{{i.score.activate}}+
+                                        {{i.score.home_work}}>=70){
+                                            document.write("Passed")
+                                        }else{
+                                            document.write("Failed")
+                                        }
+                                    }
+                                    catch(SyntaxError) {
+                                        document.write(0)
+                                      }
+                                    
+                                </script>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Subject: {{group.subject}}</td>
+                            <td>Time: {{group.start_time|date:"g:i A"}}</td>
+                            <td>Date: {{group.start_date|date:"D d M Y"}}</td>
+                            {% for j in teacher %}
+                            <td>Teacher: {{j.id_teacher.admin.first_name}} {{j.id_teacher.admin.last_name}}</td>
+                            {% endfor %}
+                        </tr>  
+                    </tbody>
+                </thead>
+            </table>
+            {% else %}
+                <table>
+                    <thead>
+                        <tbody>
+                            <rt>
+                                <th>Full Name</th>
+                                <th>level</th>
+                                <th>Reading</th>
+                                <th>Writing</th>
+                                <th>Listening</th>
+                                <th>Speaking</th>
+                            </rt>
+                            {% for i in students %}
+                            <tr>
+                                <td class="primary">{{i.id_student.first_name}} {{i.id_student.last_name}}</td>
+                                <td class="primary">Middle</td>
+                                <td class="primary"><span class="value_fr">{{i.middle_skill.reading}}</span></td>
+                                <td class="primary">{{i.middle_skill.writing}}</td>
+                                <td class="primary">{{i.middle_skill.listening}}</td>
+                                <td class="primary">{{i.middle_skill.speaking}}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Score</td>
+                                <td class="danger">Final</td>
+                                <td class="primary"><span class="value_mr">{{i.final_skill.reading}}</span></td>
+                                <td class="primary">{{i.final_skill.writing}}</td>
+                                <td class="primary">{{i.final_skill.listening}}</td>
+                                <td class="primary">{{i.final_skill.speaking}}</td>
+                            </tr>
+                            <tr>
+                                <td><script>
+                                    try{
+                                        document.write({{i.final_skill.reading}}+{{i.middle_skill.reading}}+{{i.final_skill.writing}}+
+                                        {{i.middle_skill.writing}}+{{i.final_skill.listening}}+{{i.middle_skill.listening}}+{{i.final_skill.speaking}}+
+                                        {{i.middle_skill.speaking}})
+                                        document.write(" / 120 ")
+                                        if({{i.final_skill.reading}}+{{i.middle_skill.reading}}+{{i.final_skill.writing}}+
+                                        {{i.middle_skill.writing}}+{{i.final_skill.listening}}+{{i.middle_skill.listening}}+{{i.final_skill.speaking}}+
+                                        {{i.middle_skill.speaking}}>=80){
+                                            document.write("Passed")
+                                        }else{
+                                            document.write("Failed")
+                                        }
+                                    }
+                                    catch(err) {
+                                        document.write(0)
+                                      }
+                                </script></td>
+                                <td class="danger">Total</td>
+                                <td class="primary"><script>document.write({{i.final_skill.reading}}+{{i.middle_skill.reading}})</script></td>
+                                <td class="primary"><script>document.write({{i.final_skill.writing}}+{{i.middle_skill.writing}})</script></td>
+                                <td class="primary"><script>document.write({{i.final_skill.listening}}+{{i.middle_skill.listening}})</script></td>
+                                <td class="primary"><script>document.write({{i.final_skill.speaking}}+{{i.middle_skill.speaking}})</script></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>Level: {{group.subject}}</td>
+                                <td>Time: {{group.start_time|date:"g:i A"}}</td>
+                                <td>Date: {{group.start_date|date:"D d M Y"}}</td>
+                                {% for j in teacher %}
+                                <td>Partner's: {{j.id_teacher.admin.first_name}} {{j.id_teacher.admin.last_name}}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </thead>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock main %}
+
+{% block recent-updates %}
+    <div class="recent-updates">
+        <h2>Options</h2>
+        <div class="updates center">
+            <button class="btn" onclick="window.print()">Print Score</button>
+        </div>
+    </div>
+{% endblock recent-updates %}
+
+{% block incom %}
+{% if user.user_type == '4' %}
+
+{% else %}
+<a href="{% url 'new-student' %}">
+    <div class="item add-product">
+        <div>
+            <span class="fa fa-user-plus icons"></span>
+            <h3>Register Student</h3>
+        </div>
+    </div>
+</a>
+{% endif %}
+{% endblock incom %}

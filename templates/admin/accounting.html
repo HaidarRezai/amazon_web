@@ -1,0 +1,231 @@
+{% extends 'index.html' %}
+
+{% block main %}
+<main>
+
+    {% include 'logo.html' %}
+    <div class="date">
+        <input type="date">
+    </div>
+
+    <!---------- END OF insights ---------->
+    <br>
+    <br>
+    <h2> Finance Manager </h2>
+    <div class="information">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success'%}
+        <script>
+            swal('Good job!', '{{message}}', 'success')
+        </script>
+        {% endif %}
+        {% endfor %}
+        {% endif%}
+
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'warning'%}
+        <script>
+            swal('Good job!', '{{message}}', 'warning')
+        </script>
+        {% endif %}
+        {% endfor %}
+        {% endif%}
+
+        <div class="inline">
+            <div>
+                <form action="{% url 'input-add'%}" method="post">
+                    {% csrf_token %}
+                    <input type="number" required name="money" placeholder="Amount">
+                    <input type="text" required name="datils" placeholder="Datils">
+                    <input type="submit" value="Save">
+                </form>
+            </div>
+            <div>
+                <form action="{% url 'output-add'%}" method="post">
+                    {% csrf_token %}
+                    <input type="number" required name="money" placeholder="Amount">
+                    <input type="text" required name="datils" placeholder="Datils">
+                    <input type="submit" value="Save">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="inline">
+        {% if totla_report_day or output_totla_report_day %}
+        <div class="information">
+            <table>
+                <thead>
+                <tbody>
+                    <tr>
+                        <th>Money</th>
+                        <th>Datils</th>
+                        <th>Time</th>
+                    </tr>
+                    {% for i in report_day %}
+                        {% ifchanged i.timestamp|date:"d" %}
+                            <tr>
+                                <td> {{i.timestamp|date:"d"}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        {% endifchanged %}
+                    <tr>
+                        <td class="success">{{i.money}} </td>
+                        <td class="primary">{{i.datils}} </td>
+                        <td> {{i.timestamp|time}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </thead>
+            </table>
+        </div>
+        <div class="information" style="margin-left:5px;">
+            <table>
+                <thead>
+                <tbody>
+                    <tr>
+                        <th>Money</th>
+                        <th>Datils</th>
+                        <th>Time</th>
+                    </tr>
+                    {% for i in output_report_day %}
+                        {% ifchanged i.timestamp|date:"d" %}
+                            <tr>
+                                <td> {{i.timestamp|date:"d"}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        {% endifchanged %}
+                    <tr>
+                        <td class="danger">{{i.money}} </td>
+                        <td class="primary">{{i.datils}} </td>
+                        <td> {{i.timestamp|time}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </thead>
+            </table>
+        </div>
+        {% else %}
+        <div class="information">
+            <h3>Not Fount </h3>
+            <div>
+                {% endif %}
+                <div>
+</main>
+{% endblock main %}
+
+{% block right %}
+<div class="right">
+    {% include 'profile_image.html' %}
+    <!-- End top -->
+    {% block recent-updates %}
+    <div class="recent-updates">
+        <h2>Reports</h2>
+        <div class="updates">
+            <form action="{% url 'acounting'%}" method="post">
+                {% csrf_token %}
+                <input type="month" required name="search">
+                <input type="submit" value="Search">
+            </form>
+            <table>
+                <br>
+                <thead>
+                <tbody>
+                    <tr>
+                        <th>Date</th>
+                        <th><span class="fa fa-arrow-down icons success"></span> Input </th>
+                        <th><span class="fa fa-arrow-up icons danger"></span> Output </th>
+                        <th><span class="fa fa-equals icons primary"></span> Result </th>
+                    </tr>
+                    <tr>
+                        <td class="primary">To Day</td>
+                        <td class="success">&nbsp;&nbsp;{{totla_report_day}} </td>
+                        <td class="danger">&nbsp;&nbsp;{{output_totla_report_day}} </td>
+                        <td class="primary">&nbsp;&nbsp;{{totla_day}} </td>
+                    </tr>
+                    <tr>
+                        <td class="primary">This Month</td>
+                        <td class="success">&nbsp;&nbsp;{{totla_report_month}} </td>
+                        <td class="danger">&nbsp;&nbsp;{{output_totla_report_month}} </td>
+                        <td class="primary">&nbsp;&nbsp;{{totla_month}} </td>
+                    </tr>
+                    <tr>
+                        <td class="primary">This Year</td>
+                        <td class="success">&nbsp;&nbsp;{{totla_report_year}} </td>
+                        <td class="danger">&nbsp;&nbsp;{{output_totla_report_year}} </td>
+                        <td class="primary">&nbsp;&nbsp;{{totla_year}}</td>
+                    </tr>
+                    {% comment %} <tr>
+                        <td class="primary">Total All</td>
+                        <td class="success">{{input}} </td>
+                        <td class="danger">{{output}} </td>
+                        <td> {{i.timestamp|time}}</td>
+                    </tr> {% endcomment %}
+                </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+    {% endblock recent-updates %}
+
+    <!-- END UPDATES -->
+    <div class="sales-analytics">
+        <h2>Course Analytics</h2>
+        <div class="item offline">
+            <div class="icon">
+                <span class="fa fa-home icons"></span>
+            </div>
+            <div class="right">
+                <div class="info">
+                    <h3>DALY REPORT</h3>
+                    <small class="text-muted">Last 24 Hours</small>
+                </div>
+                <h5 class="success">+{{pre_report_day}}%</h5>
+                <h3>{{totla_report_day}} AFG</h3>
+            </div>
+        </div>
+        <div class="item online">
+            <div class="icon">
+                <span class="fa fa-home icons"></span>
+            </div>
+            <div class="right">
+                <div class="info">
+                    <h3>MONTH REPORT</h3>
+                    <small class="text-muted">Last 30 Days</small>
+                </div>
+                <h5 class="success">+{{pre_report_month}}%</h5>
+                <h3>{{totla_report_month}} AFG</h3>
+            </div>
+        </div>
+        <div class="item customers">
+            <div class="icon">
+                <span class="fa fa-home icons"></span>
+            </div>
+            <div class="right">
+                <div class="info">
+                    <h3>YEAT REPORT</h3>
+                    <small class="text-muted">Last 1 Year</small>
+                </div>
+                <h5 class="success">+{{pre_report_year}}%</h5>
+                <h3>{{totla_report_year}} AFG</h3>
+            </div>
+        </div>
+        {% block incom %}
+        <a href="{% url 'new-student' %}">
+            <div class="item add-product">
+                <div>
+                    <span class="fa fa-user-plus icons"></span>
+                    <h3>Register Student</h3>
+                </div>
+            </div>
+        </a>
+        {% endblock incom %}
+    </div>
+</div>
+{% endblock right %}

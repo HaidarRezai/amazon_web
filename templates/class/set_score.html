@@ -1,0 +1,417 @@
+{% extends 'index.html' %}
+{% block aside %}
+{% if user.user_type == '4' %}
+    <aside>
+        <div class="top">
+            <div class="logo">
+                {% load static %}
+                <img src="{% static './image/logo.png'%}">
+                <h2>BAH<span class="danger">AR</span></h2>
+            </div>
+            <div class="close" id="close-btn">
+                <span class="material-icons-sharp">&#9776;</span>
+            </div>
+        </div>
+        <div class="sidebar">
+            <a href="{% url 'teacher-system'%}" class="icon-a">
+                <span class="fa fa-home spancons"></span>
+                <h3>Home</h3>
+            </a>
+            <a href="{% url 'my-profile'%}" class="icon-a active">
+                <span class="fa fa-users icons"></span>
+                <h3>My Class</h3>
+            </a>
+            <a href="{% url 'logout' %}" class="icon-a">
+                <span class="fa fa-sign-out-alt icons"></span>
+                <h3>Log out</h3>
+            </a>
+        </div>
+    </aside>
+    {% else %}
+    <aside>
+        <div class="top">
+            <div class="logo">
+                {% load static %}
+                <img src="{% static './image/logo.png'%}">
+                <h2>BAH<span class="danger">AR</span></h2>
+            </div>
+            <div class="close" id="close-btn">
+                <span class="material-icons-sharp">&#9776;</span>
+            </div>
+        </div>
+        <div class="sidebar">
+            <a href="{% url 'home'%}" class="icon-a">
+                <span class="fa fa-home spancons"></span>
+                <h3>Home</h3>
+            </a>
+            <a href="{% url 'class-add'%}" class="icon-a active">
+                <span class="fa fa-book-open  icons"></span>
+                <h3>Add Class</h3>
+            </a>
+            <a href="{% url 'qars'%}" class="icon-a">
+                <span class="fa fa-money-bill-alt icons"></span>
+                <h3>Remainder</h3>
+            </a>
+            <a href="{% url 'exam' %}" class="icon-a">
+                <span class="fa fa-book-reader icons"></span>
+                <h3>Exam</h3>
+            </a>
+            <a href="{% url 'all-student'%}" class="icon-a">
+                <span class="fa fa-users icons"></span>
+                <h3>All Students</h3>
+            </a>
+            <a href="{% url 'teacher-all'%}" class="icon-a">
+                <span class="fa fa-chalkboard-teacher icons"></span>
+                <h3>View Teacher</h3>
+            </a>
+            <a href="{% url 'acounting'%}" class="icon-a">
+                <span class="fa fa-coins icons"></span>
+                <h3>Acounting</h3>
+            </a>
+            <a href="{% url 'logout' %}" class="icon-a">
+                <span class="fa fa-sign-out-alt icons"></span>
+                <h3>Log out</h3>
+            </a>
+        </div>
+    </aside>
+{% endif %}
+{% endblock aside %}
+<!--------------- END OF ASIDE ---------------->
+{% block main %}
+<main>
+    {% include 'logo.html' %}
+    {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'success'%}
+            <script>
+                swal('Good iob!', '{{message}}', 'success')
+            </script>
+            {% endif %}
+            {% endfor %}
+            {% endif%}
+
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'warning'%}
+            <h2 class="danger">{{message}}</h2>
+            {% endif %}
+            {% endfor %}
+        {% endif%}
+    
+    <!---------- END OF insights ---------->
+    <div class="information">
+        <div class="center">
+            {% for i in students %}
+                <table  style="width:100%">
+                    <thead>
+                        <tbody>
+                            <rt>
+                                <th>ID</th>
+                                <th>Full Name</th>
+                                <th>Father</th>
+                                <th>photo</th>
+                            </rt>
+                            <tr>
+                                <td class="primary">{{i.id_student.id}}</td>
+                                <td class="primary">{{i.id_student.first_name}} {{i.id_student.last_name}}</td>
+                                <td class="primary">{{i.id_student.father_name}}</td>
+                                <td>
+                                    <a href="{% url 'student-profile' i.id_student.id %}">
+                                        <div class="profile-photo">
+                                            {% if i.id_student.student_pic != "" %}
+                                                {% load static %}
+                                                <img src="/{{i.id_student.student_pic}}">
+                                            {% else %}
+                                                {% load static %}
+                                                <img src="{% static './image/profile_user.png'%}">
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </thead>
+                </table>
+                {% if i.id_group.subject == 'Starter' or i.id_group.subject == 'Prep 1' or i.id_group.subject == 'Prep 2' or i.id_group.subject == 'Prep 3' %}
+                    {% if i.score.score %}
+                        <form action="{% url 'update-score' %}" method="post">
+                            {% csrf_token %}
+
+                            <input type="text" required hidden value="set" name="set">
+                            <input type="text" required hidden value="{{students.number}}" name="page">
+                            
+                            <input type="number" required hidden value="{{i.id}}" name="group_student">
+                            <span class="label">Middle Score:</span><input type="number" min="1" max="40" required value="{{i.score.score}}"
+                                name="score" placeholder="Middle Score">
+                            <br>
+                            <span class="label">Final Score:</span><input type="number" min="1" max="50" required value="{{i.score.final_score}}"
+                                name="final_score" placeholder="Final Score">
+                            <br>
+                            <span class="label">Activate Class:</span><input type="number" min="1" max="5" required value="{{i.score.activate}}"
+                                name="activate" placeholder="Activate Class">
+                            <br>
+                            <span class="label">Home Work:</span><input type="number" min="1" max="5" required value="{{i.score.home_work}}" name="home_work"
+                                placeholder="Home Work">
+                            <br>
+                            <input type="submit" value="Update Score">
+                        </form>
+                    {% else %}
+                        <form action="{% url 'set-score' %}" method="post">
+                            {% csrf_token %}
+
+                            <input type="text" required hidden value="set" name="set">
+                            {% if students.has_next %}
+                                <input type="text" required hidden value="{{students.next_page_number}}" name="page">
+                            {% endif %}
+
+                            <input type="text" name="group_student" hidden value="{{i.id}}">
+                            <input type="number" required min="1" max="40" name="score" placeholder="Middle Score">
+                            <br>
+                            <input type="number" required min="1" max="50" name="final_score" placeholder="Final Score">
+                            <br>
+                            <input type="number" required min="1" max="5" name="activate" placeholder="Activate Class">
+                            <br>
+                            <input type="number" required min="1" max="5" name="home_work" placeholder="Home Work">
+                            <br>
+                            <input type="submit" required value="Set Score">
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <div class="inline">
+                        {% if i.middle_skill.reading %}
+                        <form action="{% url 'update_middle-skill' %}" method="post">
+                            {% csrf_token %}
+                            <input type="text" required hidden value="set" name="set">
+                            <input type="text" required hidden value="{{students.number}}" name="page">
+
+                            <input type="text" name="group_student" hidden value="{{i.id}}">
+                            <input type="number" required maxlength="2" min="1" max="15" name="reading"
+                                value="{{i.middle_skill.reading}}" placeholder="Reading For Middle">
+                            <br>
+                            <input type="number" required maxlength="2" min="1" max="15" name="writing"
+                                value="{{i.middle_skill.writing}}" placeholder="Writing For Middle">
+                            <br>
+                            <input type="number" required maxlength="2" min="1" max="15" name="listening"
+                                value="{{i.middle_skill.listening}}" placeholder="Listening For Middle">
+                            <br>
+                            <input type="number" required maxlength="2" min="1" max="15" name="speaking"
+                                value="{{i.middle_skill.speaking}}" placeholder="Spesking For Middle">
+                            <br>
+                            <input type="submit" value="Update Score">
+                        </form>
+                        {% if i.final_skill.reading %}
+                        <form action="{% url 'update_final-skill' %}" method="post">
+                            {% csrf_token %}
+                            <input type="text" required hidden value="set" name="set">
+                            <input type="text" required hidden value="{{students.number}}" name="page">
+                            
+                            <input type="text" name="group_student" hidden value="{{i.id}}">
+                            <input type="number" required min="1" max="15" name="reading"
+                                value="{{i.final_skill.reading}}" placeholder="Reading For Final">
+                            <br>
+                            <input type="number" required min="1" max="15" name="writing"
+                                value="{{i.final_skill.writing}}" placeholder="Writing For Final">
+                            <br>
+                            <input type="number" required min="1" max="15" name="listening"
+                                value="{{i.final_skill.listening}}" placeholder="Listening For Final">
+                            <br>
+                            <input type="number" required min="1" max="15" name="speaking"
+                                value="{{i.final_skill.speaking}}" placeholder="Spesking For Final">
+                            <br>
+                            <input type="submit" required value="Update Score">
+                        </form>
+                        {% else %}
+                        <form action="{% url 'final-skill' %}" method="post">
+                            {% csrf_token %}
+
+                            <input type="text" required hidden value="set" name="set">
+                            {% if students.has_next %}
+                                <input type="text" required hidden value="{{students.next_page_number}}" name="page">
+                            {% endif %}
+
+                            <input type="text" name="group_student" hidden value="{{i.id}}">
+                            <input type="number" required min="1" max="15" name="reading" placeholder="Reading For Final">
+                            <br>
+                            <input type="number" required min="1" max="15" name="writing" placeholder="Writing For Final">
+                            <br>
+                            <input type="number" required min="1" max="15" name="listening" placeholder="Listening For Final">
+                            <br>
+                            <input type="number" required min="1" max="15" name="speaking" placeholder="Spesking For Final">
+                            <br>
+                            <input type="submit" required value="Set Score">
+                        </form>
+                        {% endif %}
+                        {% else %}
+                        <form action="{% url 'middle-skill' %}" method="post">
+                            {% csrf_token %}
+                            <input type="text" required hidden value="set" name="set">
+                            {% if students.has_next %}
+                                <input type="text" required hidden value="{{students.next_page_number}}" name="page">
+                            {% endif %}
+                            <input type="text" name="group_student" hidden value="{{i.id}}">
+                            <input type="number" required maxlength="2" min="1" max="15" name="reading"
+                                placeholder="Reading For Middle">
+                            <br>
+                            <input type="number" required maxlength="2" min="1" max="15" name="writing"
+                                placeholder="Writing For Middle">
+                            <br>
+                            <input type="number" required maxlength="2" min="1" max="15" name="listening"
+                                placeholder="Listening For Middle">
+                            <br>
+                            <input type="number" required maxlength="2" min="1" max="15" name="speaking"
+                                placeholder="Spesking For Middle">
+                            <br>
+                            <input type="submit" value="Set Score">
+                        </form>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <br>
+            <span class="current next">
+                <a>{{ students.number }}</a> <a>of</a> <a>{{students.paginator.num_pages }}</a>
+            </span>
+        </div>
+    </div>
+    <br>
+    <div class="center">
+        <div class="pagination">
+            {% if students.has_previous %}
+            <a href="?page=1"><span class="fa fa-angle-double-left spancons"></span></a>
+            <a href="?page={{ students.previous_page_number }}"><span class="fa fa-chevron-left spancons"></span></a>
+            {% endif %}
+            {% if students.has_next %}
+            <a href="?page={{ students.next_page_number }}"><span class="fa fa-chevron-right spancons"></span></a>
+            <a href="?page={{ students.paginator.num_pages }}"><span class="fa fa-angle-double-right spancons"></span></a>
+            {% endif %}
+        </div>
+    </div>
+    {% for i in students %}
+    <section id="my-section">
+        <div class="self_info">
+            <pre>
+                <p>                 {{i.id_student.first_name}}&nbsp;{{i.id_student.last_name}}</p>
+                <p>     {{i.id_group.subject}}               {{i.id_group.subject}}          {% if result == 'Pass' %}Next level {% else %}Next level{% endif %}  </p>
+            </pre>
+        </div>
+        <div class="inline">
+            {% if i.id_group.subject == 'Starter' or i.id_group.subject == 'Prep 1' or i.id_group.subject == 'Prep 2' or i.id_group.subject == 'Prep 3' %}
+                <table style="width:100%">
+                    <tr>
+                        <th>Middle</th>
+                        <th>Final</th>
+                        <th>Class Activity</th>
+                        <th>Final Total</th>
+                        <th>Result</th>
+                    </tr>
+                    <tr>
+                        <td>{{i.score.score}}</td>
+                        <td>{{i.score.final_score}}</td>
+                        <td><script>document.write({{i.score.activate}}+{{i.score.home_work}})</script></td>
+                        <td><script>document.write(
+                            {{i.score.activate}}+{{i.score.home_work}}
+                            +{{i.score.final_score}}+{{i.score.score}}
+                            )</script> / 100</td>
+                        <td>
+                            <script>
+                                if({{i.score.activate}}+{{i.score.home_work}}
+                                    +{{i.score.final_score}}+{{i.score.score}} >= 60 ){
+                                        document.write("Passed")  
+                                    }else{
+                                        document.write("Failed")
+                                    }
+                            </script>
+                        </td>
+                    </tr>
+                </table>
+            {% else %}
+                <table style="width:100%">
+                    <tr>
+                        <th>Skill</th>
+                        <th>Middle</th>
+                        <th>Final</th>
+                        <th>Total</th>
+                        <th>Final Total</th>
+                        <th>Result</th>
+                    </tr>
+                    <tr>
+                        <td>Reading</td>
+                        <td>{{i.middle_skill.reading}}</td>
+                        <td>{{i.final_skill.reading}}</td>
+                        <td><script>document.write({{i.middle_skill.reading}}+{{i.final_skill.reading}})</script></td>
+                    </tr>
+                    <tr>
+                        <td>Writing</td>
+                        <td>{{i.middle_skill.writing}}</td>
+                        <td>{{i.final_skill.writing}}</td>
+                        <td><script>document.write({{i.middle_skill.writing}}+{{i.final_skill.writing}})</script></td>
+                        <td>
+                            <script>
+                                document.write({{i.middle_skill.reading}}+{{i.final_skill.reading}}
+                                +{{i.middle_skill.writing}}+{{i.final_skill.writing}}
+                                +{{i.middle_skill.listening}}+{{i.final_skill.listening}}
+                                +{{i.middle_skill.speaking}}+{{i.final_skill.speaking}}
+                                )
+                            </script>
+                            / 120</td>
+                        <td><script>
+                            if({{i.middle_skill.reading}}+{{i.final_skill.reading}}
+                            +{{i.middle_skill.writing}}+{{i.final_skill.writing}}
+                            +{{i.middle_skill.listening}}+{{i.final_skill.listening}}
+                            +{{i.middle_skill.speaking}}+{{i.final_skill.speaking}}>= 80){
+                                document.write("Passed") 
+                            }
+                            else{
+                                document.write("Failed") 
+                            }
+                        </script></td>
+                    </tr>
+                    <tr>
+                        <td>Listening</td>
+                        <td>{{i.middle_skill.listening}}</td>
+                        <td>{{i.final_skill.listening}}</td>
+                        <td><script>document.write({{i.middle_skill.listening}}+{{i.final_skill.listening}})</script></td>
+                    </tr>
+                    <tr>
+                        <td>Spesking</td>
+                        <td>{{i.middle_skill.speaking}}</td>
+                        <td>{{i.final_skill.speaking}}</td>
+                        <td><script>document.write({{i.middle_skill.speaking}}+{{i.final_skill.speaking}})</script></td>
+                    </tr>
+                </table>
+            {% endif %}
+            <div class="qrcode">
+                {% load static %}
+                <img src="{% static './image/amazonQR.png'%}">
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+</main>
+{% endblock main %}
+<!--------------------- END OF MAIN ------------------------------>
+{% block recent-updates %}
+<div class="recent-updates">
+    <h2>Some</h2>
+    <div class="updates center">
+        <div class="btns">
+            <a class="btnu" onclick="window.print()">Print Result</a>
+        </div>
+    </div>
+</div>
+{% endblock recent-updates %}
+
+{% block incom %}
+{% if user.user_type == '4' %}
+
+{% else %}
+<a href="{% url 'new-student' %}">
+    <div class="item add-product">
+        <div>
+            <span class="fa fa-user-plus icons"></span>
+            <h3>Register Student</h3>
+        </div>
+    </div>
+</a>
+{% endif %}
+{% endblock incom %}

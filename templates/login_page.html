@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+{% block aside %}
+<p>Amazon</p>
+{% endblock aside %}
+{% block main %}
+<main>
+    <div class="inline">
+        <h1>Login page</h1>
+        {% load static %}
+        <div class="amazon_logo">
+            <img src="{% static './image/amazon_logo.png'%}">
+        </div>
+    </div>
+    <div class="date">
+        <input type="date">
+    </div>
+    <div class="recent-order">
+
+        <h2>Login Your Account</h2>
+        <div class="information">
+            <h2>Enter Your Email and Password!</h2>
+
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'error'%}
+            <script>
+                swal('Problem!', '{{message}}', 'error')
+            </script>
+            {% endif %}
+            {% endfor %}
+            {% endif%}
+
+            <div class="deleteare">
+                <form action="{% url 'dologin' %}" method="post">
+                    {% csrf_token %}
+                    <input type="email" required name="email" placeholder="Email:">
+                    <br>
+                    <input type="password" required name="password" placeholder="Password:">
+                    <br>
+                    <input type="submit" value="Login">
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock main %}
+
+{% block right %}
+{% load static %}
+<div class="right">
+    <div class="top">
+        <button id="menu-btn">
+            <span class="">&#9776;</span>
+        </button>
+        <div class="theme-toggler">
+            <span class="fa fa-book icons active"></span>
+            <span class="fa fa-home icons"></span>
+        </div>
+    </div>
+</div>
+{% endblock right %}

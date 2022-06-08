@@ -1,0 +1,192 @@
+{% extends 'index.html' %}
+
+{% block aside %}
+<aside>
+    <div class="top">
+        <div class="logo">
+            {% load static %}
+            <img src="{% static './image/logo.png'%}">
+            <h2>BAH<span class="danger">AR</span></h2>
+        </div>
+        <div class="close" id="close-btn">
+            <span class="material-icons-sharp">&#9776;</span>
+        </div>
+    </div>
+    <div class="sidebar">
+        <a href="{% url 'home'%}" class="icon-a ">
+            <span class="fa fa-home spancons"></span>
+            <h3>Home</h3>
+        </a>
+        <a href="{% url 'class-add'%}" class="icon-a">
+            <span class="fa fa-book-open  icons"></span>
+            <h3>Add Class</h3>
+        </a>
+        <a href="{% url 'qars'%}" class="icon-a">
+            <span class="fa fa-money-bill-alt icons"></span>
+            <h3>Remainder</h3>
+        </a>
+        <a href="{% url 'exam' %}" class="icon-a">
+            <span class="fa fa-book-reader icons"></span>
+            <h3>Exam</h3>
+        </a>
+        <a href="{% url 'all-student'%}" class="icon-a active">
+            <span class="fa fa-users icons"></span>
+            <h3>All Students</h3>
+        </a>
+        <a href="{% url 'teacher-all'%}" class="icon-a">
+            <span class="fa fa-chalkboard-teacher icons"></span>
+            <h3>View Teacher</h3>
+        </a>
+        <a href="{% url 'acounting'%}" class="icon-a">
+            <span class="fa fa-coins icons"></span>
+            <h3>Acounting</h3>
+        </a>
+        <a href="{% url 'logout' %}" class="icon-a">
+            <span class="fa fa-sign-out-alt icons"></span>
+            <h3>Logout</h3>
+        </a>
+    </div>
+</aside>
+{% endblock aside %}
+
+
+{% block main %}
+<main>
+    {% include 'logo.html' %}
+    <!---------- END OF insights ---------->
+    <div class="information">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success'%}
+
+        <div class="bell">
+            {% load static %}
+            
+                <div class="amazon_logo">
+                    <img src="{% static './image/amazon_logo.png'%}">
+                </div>
+                <div class="user-photo">
+                    {% if student.student_pic == "" %}
+                    {% load static %}
+                    <img src="{% static './image/profile_user.png'%}">
+                    {% else %}
+                    <img src="/{{student.student_pic}}">
+                    {% endif %}
+                    <div class="id_stu"><p class="primary">ID: {{student.id}}</p></div>
+                </div>
+            <table style="width:99%; text-align:left;">
+                <tr>
+                    <td>Full Name:<span class="primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{student.first_name}} {{student.last_name}}</span></td>
+                </tr>
+                <tr>
+                    <td>Father's Name: <span class="primary">{{student.father_name}}</span></td>
+                </tr>
+                <tr>
+                    <td>Full Fee:<span class="primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{group.fees}} AFG</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Paid Fee:<span class="primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{fees}} AFG</span></td>
+                </tr>
+                {% if baqi %}
+                <tr>
+                    <td>Unpaid Fee: <span class="danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{baqi}} AFG</span></td>
+                </tr>
+                {% endif %}
+                {% if descount %}
+                <tr>
+                    <td>Discount: <span class="primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{descount}} %</span></td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td>Level: <span
+                            class="primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{group.subject}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Time: <span class="primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{group.start_time|date:"h:i A"}}</span></td>
+                </tr>
+            </table>
+            <div class="footer_as">
+                {% if baqi %}
+                {% else %}
+                <br>
+                <br>
+                {% endif %}
+                {% if descount %}
+                {% else %}
+                <br>
+                <br>
+                {% endif %}
+                <ol type="1">
+                    <li>
+                        .فیس پرداخت شده به هیچ عنوان مسترد نمی گردد *
+                    </li>
+                    <li>
+                        .تغییر تایم فقط یک بار و آن هم طی سه روز اول امکان پذیر است *
+                    </li>
+                    <li>
+                        .به همرا داشتن کارت دانش آموزی برای ورود به آکادمی الزامی می باشد *
+                    </li>
+                    {% comment %} <li>
+                        برای ثبت نام لطفا کارت دانش آموزی و ریزالت کارت سمستر قبلی را به همراه داسته باشید.
+                    </li> {% endcomment %}
+                </ol>
+                <div class="address">
+                    <p class="center">0202570935 / شماره تماس: 0777749074</p>
+                    <p class="center">آدرس: جاده شهید مزاری<sup>(ره)</sup>، ایستگاه نانوایی</p>
+                </div>
+            </div>
+            <ol type="1">
+                <br>
+                <li>Registered By <span class="primary">{{by_name}} {{by_last_name}}<span></li>
+                <li>Date and Time: <span class="primary">{% now "Y-m-d D / g:i A" %}</span></li>
+            </ol>
+        </div>
+        <script>
+            function loadPage() {
+                window.print();
+            }
+            {% comment %} setInterval(function () {
+                window.print();
+            }, 9000); {% endcomment %}
+
+        </script>
+        {% endif %}
+        {% endfor %}
+        {% endif%}
+
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'warning'%}
+        <h2 class="danger">{{message}}</h2>
+        {% endif %}
+        {% endfor %}
+        {% endif%}
+    </div>
+</main>
+{% endblock main %}
+
+{% block recent-updates %}
+<div class="recent-updates">
+    <h2>Search Student</h2>
+    <div class="updates">
+        <p class="danger">You can print bell agin if go back you can not print bell!</p>
+        <div class="btns">
+            <a class="btnu" href="{% url 'student-profile' student.id %}">Go Back</a>
+            <a class="btnu" onclick="window.print()">Print Bell Agin</a>
+        </div>
+    </div>
+</div>
+{% endblock recent-updates %}
+
+{% block incom %}
+<a href="{% url 'new-student' %}">
+    <div class="item add-product">
+        <div>
+            <span class="fa fa-user-plus icons"></span>
+            <h3>Register Student</h3>
+        </div>
+    </div>
+</a>
+{% endblock incom %}

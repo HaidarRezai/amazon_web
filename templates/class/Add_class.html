@@ -1,0 +1,164 @@
+{% extends 'index.html' %}
+
+{% block main %}
+
+<main>
+    {% include 'logo.html' %}
+    <!---------- END OF insights ---------->
+    <div class="recent-order">
+        <h2>Create new Class</h2>
+        <div class="information">
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'success'%}
+            <script>
+                swal('Good job!', '{{message}}', 'success')
+            </script>
+            {% endif %}
+            {% endfor %}
+            {% endif%}
+
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'warning'%}
+            <script>
+                swal('Good job!', '{{message}}', 'warning')
+            </script>
+            {% endif %}
+            {% endfor %}
+            {% endif%}
+
+            <form action="{% url 'class-save'%}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <select class="input" required name="subject">
+                    <option>---- Select Class ----</option>
+                    <option value="Starter">Starter</option>
+                    <option value="Prep 1">Prep 1</option>
+                    <option value="Prep 2">Prep 2</option>
+                    <option value="Prep 3">Prep 3</option>
+                    <option value="Intro">Intro</option>
+                    <option value="EAP 1">EAP 1</option>
+                    <option value="EAP 2">EAP 2</option>
+                    <option value="EAP 3">EAP 3</option>
+                    <option value="EAP 4">EAP 4</option>
+                    <option value="EAP 5">EAP 5</option>
+                    <option value="FST">FST</option>
+                    <option value="TOEFL">TOEFL</option>
+                    <option value="Specil Speaking">Specil Speaking</option>
+                    <option value="Academic Writing">Academic Writing</option>
+                    <option value="Special Kids">Special Kids</option>
+                    <option value="Special Grammar">Special Grammar</option>
+                    <option value="Special Class">Special Class</option>
+                </select>
+                <input type="number" required max="99" name="number_class" placeholder="Number of Class:">
+                <input type="time" required name="start_time">
+                <input type="date" required name="start_date">
+                <input type="date" required name="end_date">
+                <input type="number" required name="fees" placeholder="Fees:">
+                <br>
+                <select class="input" required name="teacher_one">
+                    <option value="Null">---- Select Teacher One ----</option>
+                    {% for i in teacher %}
+                    <option value="{{i.id}}">{{i.admin.first_name}} {{i.admin.last_name}}</option>
+                    {% endfor %}
+                </select>
+                <div class="dropdown">
+                    <apan class="dropbtn"> Salary </apan>
+                    <div class="dropdown-content">
+                        <select name="type_salary_one" required>
+                            <option value="Percentage">Percentage</option>
+                            <option value="Month">Month</option>
+                            <option value="Fixed">Fixed</option>
+                        </select>
+                        <input type="number" required name="salary_one" placeholder="Amount">
+                    </div>
+                </div>
+                <br>
+                <select class="input" name="teacher_tow">
+                    <option value="Null">---- Select Teacher Two ----</option>
+                    {% for i in teacher %}
+                    <option value="{{i.id}}">{{i.admin.first_name}} {{i.admin.last_name}}</option>
+                    {% endfor %}
+                </select>
+                <div class="dropdown">
+                    <apan class="dropbtn"> Salary </apan>
+                    <div class="dropdown-content">
+                        <select class="input" name="type_salary_tow">
+                            <option value="Percentage">Percentage</option>
+                            <option value="Month">Month</option>
+                            <option value="Fixed">Fixed</option>
+                        </select>
+                        <input type="number" name="salary_tow" placeholder="Amount">
+                    </div>
+                </div>
+                <br>
+                <input type="submit" value="Register">
+            </form>
+        </div>
+
+        <div class="recent-order">
+            <table>
+                <thead>
+                <tbody>
+                    <rt>
+                        <th>Class_ID</th>
+                        <th>Name of Class</th>
+                        <th>Time</th>
+                        <th>Fees of Class</th>
+                        <th>Number of Class</th>
+                        <th>Start Date</th>
+                        <th>Update</th>
+                        <th>More</th>
+                    </rt>
+                    {% for i in info_class %}
+                    <tr>
+                        {% comment %} <td>{% if i.end_date > now.day %}afads{% endif %}</td> {% endcomment %}
+                        <td>{{i.id}}</td>
+
+                        <form action="{% url 'finisht' %}" method="post">
+                            {% csrf_token %}
+                            <input type="number" hidden name="id_class" value="{{i.id}}">
+                            <td class="primary">
+                                {% if i.active == '1' %}
+                                <button><span class="fa fa-circle icons active"></span></button>
+                                {% else %}
+                                <button><span class="fa fa-circle icons danger"></span></button>
+                                {% endif %}{{i.subject}}
+                            </td>
+                        </form>
+
+                        <td>{{i.start_time}}</td>
+                        <td>{{i.fees}} AF</td>
+                        <td>{{i.number_class}}</td>
+                        <td id="start_date" class="primary">{{ i.start_date|date:"D d M Y" }}</td>
+                        <td><a href="{% url 'class-update' i.id %}">Update</a></td>
+                        <td><a href="{% url 'class-info' i.id %}">More</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </thead>
+            </table>
+            <div class="center">
+                <div class="pagination">
+                    {% if info_class.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ info_class.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current next">
+                        <a> Page</a> <a>{{ info_class.number }}</a> <a>of</a>
+                        <a>{{ info_class.paginator.num_pages }}</a>
+                    </span>
+
+                    {% if info_class.has_next %}
+                    <a href="?page={{ info_class.next_page_number }}">next</a>
+                    <a href="?page={{ info_class.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </div>
+            </div>
+            <a href="{% url 'class-add'%}"><span class="success">Active Class</span></a>
+            <a href="{% url 'show-all'%}"><span class="danger">Deactive Class</span></a>
+        </div>
+</main>
+
+{% endblock main %}

@@ -1,0 +1,91 @@
+{% extends 'index.html' %}
+{% block aside %}
+<aside>
+    <div class="top">
+        <div class="logo">
+            {% load static %}
+            <img src="{% static './image/logo.png'%}">
+            <h2>BAH<span class="danger">AR</span></h2>
+        </div>
+        <div class="close" id="close-btn">
+            <span class="material-icons-sharp">&#9776;</span>
+        </div>
+    </div>
+    <div class="sidebar">
+        <a href="{% url 'home'%}" class="icon-a ">
+            <span class="fa fa-home spancons"></span>
+            <h3>Home</h3>
+        </a>
+        <a href="{% url 'class-add'%}" class="icon-a">
+            <span class="fa fa-book-open  icons"></span>
+            <h3>Add Class</h3>
+        </a>
+        <a href="{% url 'qars'%}" class="icon-a">
+            <span class="fa fa-money-bill-alt icons"></span>
+            <h3>Remainder</h3>
+        </a>
+        <a href="{% url 'exam' %}" class="icon-a">
+            <span class="fa fa-book-reader icons"></span>
+            <h3>Exam</h3>
+        </a>
+        <a href="{% url 'all-student'%}" class="icon-a">
+            <span class="fa fa-users icons"></span>
+            <h3>All Students</h3>
+        </a>
+        <a href="{% url 'teacher-all'%}" class="icon-a active">
+            <span class="fa fa-chalkboard-teacher icons"></span>
+            <h3>View Teacher</h3>
+        </a>
+        <a href="{% url 'acounting'%}" class="icon-a">
+            <span class="fa fa-coins icons"></span>
+            <h3>Acounting</h3>
+        </a>
+        <a href="{% url 'logout' %}" class="icon-a">
+            <span class="fa fa-sign-out-alt icons"></span>
+            <h3>Logout</h3>
+        </a>
+    </div>
+</aside>
+{% endblock aside %}
+
+
+
+{% block main %}
+
+<main>
+    {% include 'logo.html' %}
+    <div class="date">
+        <input type="date">
+    </div>
+    <!---------- END OF insights ---------->
+    <div class="recent-order">
+        <h2>Delete this Item</h2>
+        <div class="information">
+            <h2>Are Sure delete <span class="danger">{{ teacher.admin.first_name }} {{ teacher.admin.last_name }}</span>
+            </h2>
+            <div class="deleteare">
+                <p>Are you sure to delete the <span class="danger">{{ teacher.admin.first_name }}
+                        {{ teacher.admin.last_name }}</span> if you want to delete click on delete but if you want to
+                    cancel click on cancel</p>
+                <a href="{% url 'teacher-dodelete' teacher.id %}" class="delete"><span
+                        class="fa fa-trash-alt spancons"></span> Delete</a>
+                <a href="{% url 'teacher-all' %}" class="cancel">Cancel</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock main %}
+
+
+
+{% block incom %}
+<a href="{% url 'teacher-add' %}">
+    <div class="item add-product">
+        <div>
+            <span class="fa fa-chalkboard-teacher icons"></span>
+            <h3>Register Teacher</h3>
+        </div>
+    </div>
+</a>
+{% endblock incom %}

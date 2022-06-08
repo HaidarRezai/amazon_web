@@ -1,0 +1,277 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Amazon English Academy</title>
+        <link rel="stylesheet" href="{% static './style.css'%}">
+        <link rel="stylesheet" href="{% static 'font/css/all.min.css'%}">
+        {% comment %}
+        <script src="{% static './js/jquery-3.6.0.min.js'%}"></script> {% endcomment %}
+        <script src="{% static 'package/dist/chart.js'%}"></script>
+        <script src="{% static 'sweetalert-master/docs/assets/sweetalert/sweetalert.min.js'%}"></script>
+    </head>
+    <body onload="loadPage()">
+        <div class="container">
+            {% block aside %}
+            {% load active_link_tags%}
+            <aside>
+                {% block top_side %}
+                <div class="top">
+                    <div class="logo">
+                        {% load static %}
+                        <img src="{% static './image/logo.png'%}">
+                        <h2>BAH<span class="danger">AR</span></h2>
+                    </div>
+                    <div class="close" id="close-btn">
+                        <span class="material-icons-sharp">&#9776;</span>
+                    </div>
+                </div>
+                {% endblock top_side %}
+                <div class="sidebar">
+                    {% block home_side %}
+                    <a href="{% url 'home'%}" class="icon-a {% active_link 'home' 'active' %}">
+                        <span class="fa fa-home spancons"></span>
+                        <h3>Home</h3>
+                    </a>
+                    {% endblock home_side %}
+                    {% block class_add_side %}
+                    <a href="{% url 'class-add'%}" class="icon-a {% active_link 'class-add' 'active' %}">
+                        <span class="fa fa-book-open  icons"></span>
+                        <h3>Add Class</h3>
+                    </a>
+                    {% endblock class_add_side %}
+                    <a href="{% url 'qars'%}" class="icon-a {% active_link 'qars' 'active' %}">
+                        <span class="fa fa-money-bill-alt icons"></span>
+                        <h3>Remainder</h3>
+                    </a>
+                    <a href="{% url 'exam' %}" class="icon-a {% active_link 'exam' 'active' %}">
+                        <span class="fa fa-book-reader icons"></span>
+                        <h3>Exam</h3>
+                    </a>
+                    {% block all_student_side %}
+                    <a href="{% url 'all-student'%}" class="icon-a {% active_link 'all-student' 'active' %}">
+                        <span class="fa fa-users icons"></span>
+                        <h3>All Students</h3>
+                    </a>
+                    {% endblock all_student_side %}
+                    {% block teacher_all_side %}
+                    <a href="{% url 'teacher-all'%}" class="icon-a {% active_link 'teacher-all' 'active' %}">
+                        <span class="fa fa-chalkboard-teacher icons"></span>
+                        <h3>View Teacher</h3>
+                    </a>
+                    {% endblock teacher_all_side %}
+                    <a href="{% url 'acounting'%}" class="icon-a {% active_link 'acounting' 'active' %}">
+                        <span class="fa fa-coins icons"></span>
+                        <h3>Acounting</h3>
+                    </a>
+                    <a href="{% url 'about_us'%}" class="icon-a {% active_link 'about_us' 'active' %}">
+                        <span class="fa fa-leaf icons"></span>
+                        <h3>About us</h3>
+                    </a>
+                    <a href="{% url 'logout' %}" class="icon-a">
+                        <span class="fa fa-sign-out-alt icons"></span>
+                        <h3>Logout</h3>
+                    </a>
+                </div>
+            </aside>
+            {% endblock aside %}
+
+            <!--------------- END OF ASIDE ---------------->
+            {% block main %}
+            <main>
+                {% include 'logo.html' %}
+                <div class="insights">
+                    <div class="sales">
+                        <span class="fa fa-home icons"></span>
+                        <div class="middle">
+                            <div class="left">
+                                <h3>Total One</h3>
+                                <h1>$30,045</h1>
+                            </div>
+                            <div class="progress">
+                                <svg>
+                                    <circle cx='38' cy="38" r="36"></circle>
+                                </svg>
+                                <div class="number">
+                                    <p>80%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="text-muted">Last 34 Hours</small>
+                    </div>
+                    <!---------- END OF One ---------->
+                    <div class="expenses">
+                        <span class="fa fa-home icons"></span>
+                        <div class="middle">
+                            <div class="left">
+                                <h3>Total Two</h3>
+                                <h1>$30,045</h1>
+                            </div>
+                            <div class="progress">
+                                <svg>
+                                    <circle cx='38' cy="38" r="36"></circle>
+                                </svg>
+                                <div class="number">
+                                    <p>80%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="text-muted">Last 34 Hours</small>
+                    </div>
+                    <!---------- END OF Two ---------->
+                    <div class="income">
+                        <span class="fa fa-home icons"></span>
+                        <div class="middle">
+                            <div class="left">
+                                <h3>Total Three</h3>
+                                <h1>$38,045</h1>
+                            </div>
+                            <div class="progress">
+                                <svg>
+                                    <circle cx='38' cy="38" r="36"></circle>
+                                </svg>
+                                <div class="number">
+                                    <p>80%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="text-muted">Last 34 Hours</small>
+                    </div>
+                    <!---------- END OF Three ---------->
+                </div>
+                <!---------- END OF insights ---------->
+                <div class="information">
+                    <script>
+                        const ctx = document.getElementById('myChart').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                                datasets: [{
+                                    label: '# of Votes',
+                                    data: [12, 19, 3, 5, 2, 3],
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    </script>
+
+                </div>
+            </main>
+            {% endblock main %}
+
+            <!--------------------- END OF MAIN ---------------------------->
+            {% block right %}
+            <div class="right">
+                {% block top %}
+                {% include 'profile_image.html' %}
+                {% endblock top %}
+                <!-- End top -->
+                {% block recent-updates %}
+                <div class="recent-updates">
+                    <h2>Recent Update</h2>
+                    <div class="updates">
+                        <div class="update">
+                            <div class="profile-photo">
+                                {% load static %}
+                                <img src="/{{user.profile_pic}}">
+                            </div>
+                            <div class="message">
+                                <p><b>{{user.first_name}}{{user.last_name}}: {% lorem 1 b random %} </b>.</p>
+                                <small class="text-muted">{{user.last_login|date:"h:i A"}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endblock recent-updates %}
+
+                <!-- END UPDATES -->
+                {% block analytics %}
+                <div class="sales-analytics">
+                    <h2>Course Analytics</h2>
+                    <div class="item offline">
+                        <div class="icon">
+                            <span class="fa fa-home icons"></span>
+                        </div>
+                        <div class="right">
+                            <div class="info">
+                                <h3>EAP</h3>
+                                <small class="text-muted">Last 24 Hours</small>
+                            </div>
+                            <h5 class="danger">-50%</h5>
+                            <h3>879</h3>
+                        </div>
+                    </div>
+                    <div class="item online">
+                        <div class="icon">
+                            <span class="fa fa-home icons"></span>
+                        </div>
+                        <div class="right">
+                            <div class="info">
+                                <h3>FST</h3>
+                                <small class="text-muted">Last 24 Hours</small>
+                            </div>
+                            <h5 class="success">+45%</h5>
+                            <h3>4545</h3>
+                        </div>
+                    </div>
+                    <div class="item customers">
+                        <div class="icon">
+                            <span class="fa fa-home icons"></span>
+                        </div>
+                        <div class="right">
+                            <div class="info">
+                                <h3>TOEFL iBT</h3>
+                                <small class="text-muted">Last 24 Hours</small>
+                            </div>
+                            <h5 class="success">+30%</h5>
+                            <h3>4545</h3>
+                        </div>
+                    </div>
+                    {% block incom %}
+                    <a href="{% url 'new-student' %}">
+                        <div class="item add-product">
+                            <div>
+                                <span class="fa fa-user-plus icons"></span>
+                                <h3>Register Student</h3>
+                            </div>
+                        </div>
+                    </a>
+                    {% endblock incom %}
+                </div>
+                {% endblock analytics %}
+            </div>
+            {% endblock right %}
+
+        </div>
+        <script src="{% static './index.js'%}"></script>
+        {% comment %}
+        <script src="{% static 'js/jquery-3.6.0.min.js'%}"></script> {% endcomment %}
+    </body>
+</html>

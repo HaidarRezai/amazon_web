@@ -1,0 +1,78 @@
+{% extends 'index.html' %}
+
+{% block aside %}
+<aside>
+    <div class="top">
+        <div class="logo">
+            {% load static %}
+            <img src="{% static './image/logo.png'%}">
+            <h2>BAH<span class="danger">AR</span></h2>
+        </div>
+        <div class="close" id="close-btn">
+            <span class="material-icons-sharp">&#9776;</span>
+        </div>
+    </div>
+    <div class="sidebar">
+        <a href="{% url 'home'%}" class="icon-a">
+            <span class="fa fa-home spancons"></span>
+            <h3>Home</h3>
+        </a>
+        <a href="{% url 'class-add'%}" class="icon-a">
+            <span class="fa fa-book-open  icons"></span>
+            <h3>Add Class</h3>
+        </a>
+        <a href="{% url 'qars'%}" class="icon-a">
+            <span class="fa fa-money-bill-alt icons"></span>
+            <h3>Remainder</h3>
+        </a>
+        <a href="{% url 'exam' %}" class="icon-a">
+            <span class="fa fa-book-reader icons"></span>
+            <h3>Exam</h3>
+        </a>
+        <a href="{% url 'all-student'%}" class="icon-a active">
+            <span class="fa fa-users icons"></span>
+            <h3>All Students</h3>
+        </a>
+        <a href="{% url 'teacher-all'%}" class="icon-a">
+            <span class="fa fa-chalkboard-teacher icons"></span>
+            <h3>View Teacher</h3>
+        </a>
+        <a href="{% url 'acounting'%}" class="icon-a">
+            <span class="fa fa-coins icons"></span>
+            <h3>Acounting</h3>
+        </a>
+        <a href="{% url 'logout' %}" class="icon-a">
+            <span class="fa fa-sign-out-alt icons"></span>
+            <h3>Logout</h3>
+        </a>
+    </div>
+</aside>
+{% endblock aside %}
+
+
+{% block main %}
+
+<main>
+    {% include 'logo.html' %}
+    <div class="date">
+        <input type="date">
+    </div>
+    <!---------- END OF insights ---------->
+    <div class="recent-order">
+        <h2>Deselect this Class</h2>
+        <div class="information">
+            <h2>Are Sure Deselect <span class="danger">{{ deselect.id_group.subject }} Time:
+                    {{ deselect.id_group.start_time }}</span></h2>
+            <div class="deleteare">
+                <p>Are you sure to Deselect this <span class="danger">{{ deselect.id_group.subject }} Time
+                        {{ deselect.id_group.start_time }}</span> if you want to delete click on delete but if you want
+                    to cancel click on cancel</p>
+                <a href="{% url 'dodeselect-class' deselect.id %}" class="delete"><span
+                        class="fa fa-trash-alt spancons"></span> Delete</a>
+                <a href="{% url 'all-student' %}" class="cancel">Cancel</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock main %}
